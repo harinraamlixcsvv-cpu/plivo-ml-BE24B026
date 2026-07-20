@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>End-of-Turn Detection - Assignment Summary</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    line-height: 1.6;
+    color: #222;
+}
+h1, h2 {
+    color: #111;
+}
+.metric {
+    padding: 12px;
+    margin: 8px 0;
+    background: #f3f3f3;
+    border-radius: 6px;
+}
+code {
+    background: #eee;
+    padding: 2px 5px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>End-of-Turn Detection</h1>
+
+<p>
+This submission implements a causal end-of-turn detector for spoken
+conversation. At each candidate pause, the system predicts the probability
+that the speaker has completed their turn rather than temporarily hesitating.
+</p>
+
+<h2>Approach</h2>
+
+<p>
+The model uses only information available before the candidate pause.
+No future audio is accessed. The feature representation captures local
+prosodic behaviour and causal turn context.
+</p>
+
+<p>
+Features include energy level and trajectory, pitch level and trajectory,
+pitch variability, voiced fraction, final voiced behaviour, elapsed turn
+time, pause position, and available speech context.
+</p>
+
+<h2>Model</h2>
+
+<p>
+The final classifier is a standardized Logistic Regression model with
+balanced class weights. Experiments also evaluated Histogram Gradient
+Boosting, but Logistic Regression achieved better out-of-fold performance
+on the primary Hindi latency metric.
+</p>
+
+<p>
+The final architecture contains three saved models:
+</p>
+
+<ul>
+<li>Hindi specialist</li>
+<li>English specialist</li>
+<li>Global fallback</li>
+</ul>
+
+<p>
+The inference pipeline selects a specialist when the language can be
+reliably inferred from the dataset structure or identifiers and otherwise
+uses the global fallback model.
+</p>
+
+<h2>Validation Methodology</h2>
+
+<p>
+Model selection used five-fold grouped out-of-fold validation. Splits were
+grouped by turn ID so that pauses belonging to the same turn could not leak
+between training and validation.
+</p>
+
+<div class="metric">
+<strong>Hindi OOF:</strong><br>
+AUC: 0.654<br>
+Mean response delay: 850 ms<br>
+Interrupted turns: 5%
+</div>
+
+<div class="metric">
+<strong>English OOF:</strong><br>
+AUC: 0.596<br>
+Mean response delay: 1301 ms<br>
+Interrupted turns: 5%
+</div>
+
+<h2>Experiments</h2>
+
+<p>
+The initial baseline produced approximately 1600 ms response delay.
+The provided starter prosodic model improved the English result to
+1190 ms.
+</p>
+
+<p>
+Subsequent experiments introduced richer energy, pitch, voicing and
+turn-context features. Honest grouped out-of-fold evaluation was then
+introduced to avoid optimistic estimates caused by fitting and evaluating
+on the same turns.
+</p>
+
+<p>
+Histogram Gradient Boosting, probability ensembling, and a pause-position
+probability heuristic were evaluated. None improved the primary Hindi
+response-delay metric over the final Logistic Regression approach.
+</p>
+
+<h2>Causality</h2>
+
+<p>
+All acoustic features are computed from audio at or before
+<code>pause_start</code>. The system does not inspect future speech when
+making an end-of-turn decision.
+</p>
+
+<h2>Inference</h2>
+
+<p>
+The final <code>predict.py</code> loads pre-trained models from disk and
+generates an EOT probability for every candidate pause. It does not retrain
+or refit on unseen evaluation data.
+</p>
+
+<h2>Key Finding</h2>
+
+<p>
+Simple causal prosodic features provide meaningful end-of-turn information.
+In this dataset, a regularized linear classifier generalized better than the
+tested nonlinear boosting model. Performance also differed substantially
+between Hindi and English, motivating language-specialized models with a
+global fallback.
+</p>
+
+</body>
+</html>
