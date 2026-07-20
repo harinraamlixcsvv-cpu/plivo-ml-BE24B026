@@ -1,4 +1,3 @@
-"""Final inference script for End-of-Turn detection."""
 
 import argparse
 import csv
@@ -209,7 +208,7 @@ def main():
 
     parser.add_argument(
         "--model_dir",
-        default="models"
+        default=""
     )
 
     parser.add_argument(
