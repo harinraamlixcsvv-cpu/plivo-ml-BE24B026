@@ -10,13 +10,13 @@ I approached this as an experimentation problem rather than trying to build one 
 
 I iterated through multiple versions of the EOT detector, starting from the baseline and exploring richer causal prosodic features and different modeling approaches.
 
-![Experiment progression](assets/experiment_progression.png)
+![Experiment progression](experiment_progression.png)
 
 The response-delay metric improved substantially over the course of experimentation. Since some early experiments used different evaluation setups, I relied on grouped out-of-fold validation for final model selection.
 
 ### Model Comparison
 
-![Hindi OOF model comparison](assets/hindi_oof_comparison.png)
+![Hindi OOF model comparison](hindi_oof_comparison.png)
 
 On grouped out-of-fold evaluation, Logistic Regression performed better than Gradient Boosting on both AUC and mean response delay, which motivated its use in the final specialist models.
 
