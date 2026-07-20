@@ -6,6 +6,20 @@ The goal is simple: when someone pauses while speaking, decide whether they have
 
 I approached this as an experimentation problem rather than trying to build one complicated model immediately. I started with the provided baseline, added richer prosodic features, tried different classifiers, moved to grouped out-of-fold validation, and finally explored language-specific models for Hindi and English.
 
+## Experiment Results
+
+I iterated through multiple versions of the EOT detector, starting from the baseline and exploring richer causal prosodic features and different modeling approaches.
+
+![Experiment progression](assets/experiment_progression.png)
+
+The response-delay metric improved substantially over the course of experimentation. Since some early experiments used different evaluation setups, I relied on grouped out-of-fold validation for final model selection.
+
+### Model Comparison
+
+![Hindi OOF model comparison](assets/hindi_oof_comparison.png)
+
+On grouped out-of-fold evaluation, Logistic Regression performed better than Gradient Boosting on both AUC and mean response delay, which motivated its use in the final specialist models.
+
 ## What I tried
 
 The initial model used a few basic signals such as energy before the pause and final pitch. From there, I experimented with a broader set of features describing how the speaker's voice behaves as they approach a pause.
