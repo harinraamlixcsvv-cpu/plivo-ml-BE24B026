@@ -305,7 +305,7 @@ where `p_eot` is the predicted probability that the candidate pause represents a
 
 There are still quite a few things I would like to try if I continued working on this.
 
-The first would be proper error analysis by listening to false positives and false negatives. I suspect there are specific types of pauses — hesitation, breath pauses, sentence-internal pauses, trailing speech — where the current features behave differently.
+The first would be proper error analysis by listening to false positives and false negatives. I suspect there are specific types of pauses  hesitation, breath pauses, sentence-internal pauses, trailing speech  where the current features behave differently.
 
 I would also like to explore:
 
@@ -323,7 +323,7 @@ I would especially want to investigate the English results further. The gap betw
 
 ## Final Thoughts
 
-What I liked about this problem is that my first instinct — "just classify whether the pause is an EOT" — turned out to be an incomplete way of thinking about it.
+What I liked about this problem is that my first instinct "just classify whether the pause is an EOT"  turned out to be an incomplete way of thinking about it.
 
 The actual problem is closer to:
 
